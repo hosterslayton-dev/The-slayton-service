@@ -1,0 +1,458 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════
+   THE SLAYTON SERVICE — DESIGN TOKENS
+   Source of truth: Brand & Design Consolidation Specification.
+
+   Palette   Matte black · Charcoal · Warm white · White
+             Warm gold (action accent) · Soft tan
+   Type      Playfair Display (display) · Poppins (nav/buttons)
+             Inter (body)
+   ═══════════════════════════════════════════════════════════════ */
+
+@theme {
+  /* ── Primary neutrals ─────────────────────────────────────── */
+  --color-ink-950: #0e0d0b; /* matte black — page footer, hero grounds */
+  --color-ink-900: #171512; /* deep surfaces */
+  --color-charcoal-800: #2a2723; /* charcoal gray — secondary dark */
+  --color-charcoal-700: #3d3a34;
+  --color-charcoal-600: #55524b; /* muted text on light */
+  --color-charcoal-500: #6e6a61;
+
+  --color-cream-50: #fdfcf9; /* brightest warm surface */
+  --color-cream-100: #faf7f2; /* warm white — default page ground */
+  --color-cream-200: #f3eee5;
+
+  /* ── Accents ──────────────────────────────────────────────── */
+  --color-gold-300: #dcc394; /* soft highlight on dark */
+  --color-gold-400: #cfae72;
+  --color-gold-500: #c19a52; /* warm gold — primary action accent */
+  --color-gold-600: #a37e3c;
+  --color-gold-700: #7f6128; /* AA-safe gold text on warm white */
+
+  --color-tan-200: #eae1d0; /* soft tan — quiet fills, rules */
+  --color-tan-300: #ddd0b8;
+  --color-tan-400: #c9b896;
+
+  /* ── Semantic aliases ─────────────────────────────────────── */
+  --color-background: var(--color-cream-100);
+  --color-foreground: var(--color-ink-900);
+  --color-muted: var(--color-charcoal-600);
+
+  /* ── Type scale support ───────────────────────────────────── */
+  --tracking-nav: 0.08em;
+  --tracking-label: 0.18em;
+
+  /* ── Status colors (light surfaces) ───────────────────────────
+     Muted, warm-leaning hues so system feedback sits inside the
+     brand palette instead of fighting it. Text shades pass AA on
+     cream-100; fills pair with ink-900 text. */
+  --color-success-600: #3f6f4f;
+  --color-success-100: #e4eee6;
+  --color-warning-700: #8a5a14;
+  --color-warning-100: #f6ecd8;
+  --color-error-600: #96382e;
+  --color-error-100: #f4e3e0;
+  --color-info-600: #3d5a72;
+  --color-info-100: #e3eaf0;
+
+  /* Status on dark surfaces (ink-950 grounds) */
+  --color-success-300: #9cc3a6;
+  --color-warning-300: #e2bb7a;
+  --color-error-300: #dfa199;
+  --color-info-300: #a3bdd2;
+
+  /* ── Typography scale ─────────────────────────────────────────
+     Fluid display sizes for editorial headings; body sizes use the
+     Tailwind defaults. */
+  --text-display-xl: clamp(2.75rem, 2rem + 3.2vw, 4.5rem);
+  --text-display-xl--line-height: 1.08;
+  --text-display-lg: clamp(2.25rem, 1.8rem + 2vw, 3.25rem);
+  --text-display-lg--line-height: 1.12;
+  --text-display-md: clamp(1.75rem, 1.5rem + 1.2vw, 2.375rem);
+  --text-display-md--line-height: 1.2;
+  --text-display-sm: clamp(1.375rem, 1.25rem + 0.6vw, 1.75rem);
+  --text-display-sm--line-height: 1.3;
+
+  /* ── Elevation ────────────────────────────────────────────────
+     Warm, soft shadows — luxury surfaces never look "stuck on". */
+  --shadow-card: 0 1px 2px rgb(23 21 18 / 0.05), 0 4px 16px rgb(23 21 18 / 0.06);
+  --shadow-card-hover:
+    0 2px 4px rgb(23 21 18 / 0.06), 0 12px 32px rgb(23 21 18 / 0.1);
+  --shadow-overlay:
+    0 8px 24px rgb(14 13 11 / 0.16), 0 24px 64px rgb(14 13 11 / 0.24);
+  --shadow-gold-glow: 0 4px 20px rgb(193 154 82 / 0.35);
+
+  /* ── Border radius ────────────────────────────────────────── */
+  --radius-card: 1rem;
+  --radius-field: 0.625rem;
+  --radius-pill: 999px;
+
+  /* ── Motion ─────────────────────────────────────────────────
+     Purposeful, subtle, performance-first. */
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.7, 0, 0.84, 0);
+  --default-transition-duration: 300ms;
+
+  /* ── Layout ───────────────────────────────────────────────── */
+  --spacing-header: 5rem; /* fixed header height offset */
+  --container-content: 72rem; /* max-w-content — standard page width */
+  --container-narrow: 42rem; /* max-w-narrow — reading width */
+  --container-wide: 88rem; /* max-w-wide — galleries, full spreads */
+}
+
+/* Non-utility design values (consumed via var(), not classes). */
+:root {
+  --duration-fast: 150ms;
+  --duration-base: 300ms;
+  --duration-slow: 600ms;
+  --duration-reveal: 900ms;
+  --duration-marquee: 48s; /* one full partner-loop cycle */
+
+  --z-header: 50;
+  --z-drawer: 60;
+  --z-modal: 70;
+  --z-toast: 80;
+  --z-tooltip: 90;
+}
+
+/* Font families reference next/font CSS variables set in the root
+   layout, so they are declared as inline (computed) theme values. */
+@theme inline {
+  --font-display: var(--font-playfair), "Georgia", "Times New Roman", serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-nav: var(--font-poppins), var(--font-inter), ui-sans-serif, sans-serif;
+}
+
+/* ═══ Base layer ═══════════════════════════════════════════════ */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-gold-500);
+    color: var(--color-ink-950);
+  }
+
+  /* Accessible, on-brand focus indication (WCAG 2.2 AA §2.4.11+) */
+  :focus-visible {
+    outline: 2px solid var(--color-gold-600);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Honor reduced-motion preferences everywhere. Purposeful motion
+     only — and none at all when the visitor asks for none. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ═══ Reusable primitives ══════════════════════════════════════ */
+
+@layer components {
+  /* Small uppercase editorial label above headings */
+  .eyebrow {
+    font-family: var(--font-nav);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-gold-700);
+  }
+
+  .eyebrow-on-dark {
+    color: var(--color-gold-300);
+  }
+
+  /* Comfortable reading width for long-form content */
+  .prose-width {
+    max-width: 42rem;
+  }
+}
+
+/* Gentle one-time entrance used by the hero. Disabled automatically
+   under prefers-reduced-motion via the base-layer rule above. */
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-rise {
+  animation: fade-rise 0.9s var(--ease-premium) both;
+}
+
+/* ═══ Scroll-reveal system ═════════════════════════════════════
+   Elements start hidden and transition in when the Reveal
+   component observes them. With reduced motion, the base-layer
+   rule zeroes the transition, so content simply appears. */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity var(--duration-reveal) var(--ease-enter),
+    transform var(--duration-reveal) var(--ease-enter);
+}
+
+.reveal[data-revealed="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+.reveal-fade {
+  transform: none;
+}
+
+.reveal-scale {
+  transform: scale(0.96);
+}
+
+.reveal-scale[data-revealed="true"] {
+  transform: none;
+}
+
+/* When JS is unavailable, never hide content. */
+@media (scripting: none) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ═══ Hero illumination (Phase 3A) ═══════════════════════════════
+   Pure CSS, no filters, no JS. Static radial gradients are
+   feathered by construction and composite on the GPU; the only
+   animated property is opacity. */
+
+/* Soft atmospheric light behind the hero logo — morning-fog glow,
+   warm white with a faint gold tint, dissolving into the ground. */
+.hero-logo-glow {
+  position: absolute;
+  inset: -38% -30%;
+  pointer-events: none;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    rgb(253 252 249 / 0.15) 0%,
+    rgb(220 195 148 / 0.07) 42%,
+    rgb(220 195 148 / 0.025) 62%,
+    transparent 78%
+  );
+}
+
+/* Near-imperceptible radial lift on the hero ground itself, centered
+   where the logo sits, separating it from background photography. */
+.hero-ambient-light {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    42% 34% at 50% 30%,
+    rgb(250 247 242 / 0.05) 0%,
+    rgb(193 154 82 / 0.035) 45%,
+    transparent 72%
+  );
+}
+
+/* ── Cross light ──────────────────────────────────────────────
+   A small illuminated Latin cross rendered entirely from two thin
+   bars of warm light. Quiet by intent: noticed after a moment,
+   never the focus. Breathes on a slow 9s cycle; perfectly still
+   under prefers-reduced-motion. */
+.cross-light {
+  position: relative;
+  display: block;
+  width: 22px;
+  height: 22px;
+  opacity: 0.55;
+  animation:
+    cross-enter 1.4s var(--ease-premium) 0.7s both,
+    cross-breathe 9s var(--ease-premium) 2.1s infinite alternate;
+}
+
+.cross-light::before,
+.cross-light::after {
+  content: "";
+  position: absolute;
+  background: rgb(253 252 249 / 0.9);
+  border-radius: 1px;
+  box-shadow:
+    0 0 5px rgb(253 252 249 / 0.45),
+    0 0 12px rgb(220 195 148 / 0.3);
+}
+
+/* Vertical beam */
+.cross-light::before {
+  left: 50%;
+  top: 0;
+  width: 1.5px;
+  height: 22px;
+  transform: translateX(-50%);
+}
+
+/* Crossbar, set above center in Latin-cross proportion */
+.cross-light::after {
+  top: 6px;
+  left: 50%;
+  width: 13px;
+  height: 1.5px;
+  transform: translateX(-50%);
+}
+
+@keyframes cross-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.55;
+  }
+}
+
+@keyframes cross-breathe {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 0.95;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cross-light {
+    animation: none;
+    opacity: 0.8;
+  }
+}
+
+/* ═══ Phase 5 micro-interactions ═══════════════════════════════ */
+
+/* Radar pulse on the map's home-base ring — scale+fade only. */
+@keyframes map-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  70% {
+    transform: scale(2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.map-pulse {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: map-pulse 4s var(--ease-premium) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-pulse {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* ═══ Partner marquee (homepage enhancement) ═══════════════════
+   Continuous strip of partner logos. The track holds the sequence
+   twice and translates exactly -50%, so the loop point is
+   pixel-identical — no visible jump. The only animated property is
+   transform (compositor-driven, GPU-accelerated); edges dissolve
+   under a mask so logos enter and leave like light, not a ticker.
+
+   Playback halts on hover, on keyboard focus within the strip, and
+   via the visible pause control (WCAG 2.2.2 — a pause mechanism
+   must exist for touch and keyboard visitors, not only hover).
+
+   Under prefers-reduced-motion the strip becomes a static, wrapped
+   grid: the aria-hidden duplicate is removed and every logo stays
+   visible and reachable — content is never trapped off-canvas. */
+
+.partner-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 12%,
+    black 88%,
+    transparent
+  );
+}
+
+.partner-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: partner-marquee var(--duration-marquee) linear infinite;
+}
+
+.partner-marquee:hover .partner-track,
+.partner-marquee:focus-within .partner-track,
+.partner-marquee[data-paused="true"] .partner-track {
+  animation-play-state: paused;
+}
+
+@keyframes partner-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partner-track {
+    animation: none;
+    width: 100%;
+  }
+  .partner-track [data-marquee-group] {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-right: 0;
+  }
+  .partner-track [data-marquee-clone],
+  .partner-track [data-marquee-repeat] {
+    display: none;
+  }
+  .partner-marquee {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
